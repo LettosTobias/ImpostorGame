@@ -168,7 +168,7 @@
                     <label class="text-gray-400 text-xs font-bold uppercase tracking-wider">Impostores</label>
                     <div class="flex items-center gap-2 bg-gray-900 px-3 py-1 rounded-lg border border-gray-700">
                         <span class="text-xl">👺</span>
-                        <span id="imposter-count-display" class="text-red-500 font-display text-xl">1</span>
+                        <span id="imposter-count-display" class="font-display text-xl text-red-500">1</span>
                     </div>
                 </div>
                 <input type="range" id="imposter-slider" min="1" max="3" value="1" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-red-500">
@@ -279,7 +279,8 @@
 
         // --- CONSTANTES API ---
         const API_MODEL = "gemini-2.5-flash-preview-09-2025";
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=`; // Key will be provided by environment
+        const API_KEY = "AIzaSyDfjJq93o4cVG2IOKz_H_sGNUg85nIy5f0"; 
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${API_KEY}`;
 
 
         // --- ESTADO DEL JUEGO ---
@@ -418,6 +419,12 @@
         // --- LÓGICA DE IA ---
 
         async function fetchSecretWordFromAI(prompt) {
+            // Verificar si la clave de API está configurada
+            if (API_KEY === "TU_CLAVE_API_DE_GEMINI_AQUI" || !API_KEY) {
+                showAlert("Error: La clave de API de Gemini no está configurada. Abre el código y reemplaza 'TU_CLAVE_API_DE_GEMINI_AQUI' con tu clave real.", true);
+                return null;
+            }
+            
             const systemPrompt = `Eres un experto generador de palabras secretas para juegos. Tu tarea es generar UNA ÚNICA palabra o frase corta (máximo 4 palabras), aleatoria, que cumpla estrictamente con la restricción dada por el usuario. La respuesta debe ser solo la palabra o frase, sin explicaciones, comillas, ni texto adicional.`;
             
             const userQuery = `Dada la siguiente restricción: "${prompt}". Genera UN solo término aleatorio que encaje.`;
@@ -492,6 +499,11 @@
                 const prompt = customWordInput.value.trim();
                 if (!prompt) return showAlert("Escribe un prompt para que la IA genere la palabra.");
                 
+                // Agregamos una verificación de API KEY aquí también
+                if (API_KEY === "TU_CLAVE_API_DE_GEMINI_AQUI" || !API_KEY) {
+                    return showAlert("Error: La clave de API de Gemini no está configurada.", true);
+                }
+                
                 setLoading(true);
                 word = await fetchSecretWordFromAI(prompt);
                 setLoading(false);
@@ -547,7 +559,7 @@
             const imposterMsg = document.getElementById('imposter-msg');
 
             // Reset
-            roleCard.className = "p-8 rounded-[2rem] shadow-2xl w-full max-w-sm transform transition-all duration-300 border-2";
+            roleCard.className = "p-8 rounded-[2rem] shadow-2xl border-2 w-full max-w-sm transform transition-all duration-300";
             secretDisplay.classList.remove('hidden');
             imposterMsg.classList.add('hidden');
 
