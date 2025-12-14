@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>El Impostor</title>
-    
-    <!-- Meta tags para parecer una App Nativa (PWA) -->
+
     <meta name="theme-color" content="#111827">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="https://emojicdn.elk.sh/🕵️‍♂️"> 
+    <link rel="apple-touch-icon" href="https://emojicdn.elk.sh/🕵️‍♂️">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Bangers&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Bangers&display=swap"
+        rel="stylesheet">
     <style>
         html {
             /* Color de fondo base para evitar bordes blancos al hacer rebote de scroll */
             background-color: #111827;
         }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #111827;
@@ -26,41 +29,57 @@
             min-height: 100vh;
             /* Eliminamos overflow-hidden para permitir scroll nativo */
         }
+
         .font-display {
             font-family: 'Bangers', cursive;
             letter-spacing: 0.05em;
         }
+
         .card-enter {
             animation: slideIn 0.3s ease-out forwards;
         }
+
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         .secret-reveal {
             background-image: radial-gradient(#374151 1px, transparent 1px);
             background-size: 20px 20px;
         }
+
         /* Estilo para inputs de iOS que evita el zoom */
-        input, select {
-            font-size: 16px !important; 
+        input,
+        select {
+            font-size: 16px !important;
         }
+
         /* Padding seguro para iPhone X+ */
         .pb-safe {
             padding-bottom: env(safe-area-inset-bottom, 20px);
         }
+
         .pt-safe {
             padding-top: env(safe-area-inset-top, 20px);
         }
+
         /* New style for simple alert box */
         #alert-box {
             transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
         }
     </style>
 </head>
+
 <body class="flex flex-col">
 
-    <!-- HEADER (Sticky para que se quede arriba al scrollear) -->
     <header class="bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 p-4 pt-safe sticky top-0 z-50 shadow-md">
         <div class="max-w-md mx-auto w-full flex justify-between items-center">
             <div class="flex items-center gap-2">
@@ -68,42 +87,42 @@
                 <h1 class="font-display text-2xl text-red-500 tracking-wide">EL IMPOSTOR</h1>
             </div>
             <div class="flex gap-3">
-                 <button id="share-btn" onclick="shareApp()" class="hidden text-gray-400 hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                <button id="share-btn" onclick="shareApp()" class="hidden text-gray-400 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                     </svg>
                 </button>
-                <button onclick="resetGame()" class="text-xs font-bold text-gray-500 hover:text-white uppercase tracking-wider border border-gray-700 rounded px-2 py-1">
+                <button onclick="resetGame()"
+                    class="text-xs font-bold text-gray-500 hover:text-white uppercase tracking-wider border border-gray-700 rounded px-2 py-1">
                     Reiniciar
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- MAIN CONTENT AREA -->
-    <!-- flex-1 permite que ocupe el espacio, pero sin restricciones de altura -->
     <main id="app" class="flex-1 w-full max-w-md mx-auto p-4 pb-safe">
-        
-        <!-- Alerta de Mensaje Temporal -->
+
         <div id="alert-box" class="fixed top-0 left-0 right-0 p-4 pt-safe z-50 transform -translate-y-full opacity-0">
-            <div id="alert-message" class="max-w-md mx-auto bg-red-600 text-white p-3 rounded-lg text-sm font-semibold shadow-xl text-center">
+            <div id="alert-message"
+                class="max-w-md mx-auto bg-red-600 text-white p-3 rounded-lg text-sm font-semibold shadow-xl text-center">
                 Mensaje de error
             </div>
         </div>
-        
-        <!-- PANTALLA 1: CONFIGURACIÓN -->
+
         <div id="screen-setup" class="space-y-5 card-enter pb-24">
-            
+
             <div class="bg-blue-900/20 border border-blue-800 p-4 rounded-xl text-center">
                 <p class="text-blue-200 text-sm font-semibold">📢 ¡Solo necesitas 1 celular!</p>
                 <p class="text-blue-300/70 text-xs mt-1">Carguen los nombres y pásense el teléfono.</p>
             </div>
 
-            <!-- Selección de Categoría -->
             <div class="bg-gray-800 p-5 rounded-2xl border border-gray-700 shadow-lg">
                 <label class="block text-gray-400 text-xs font-bold uppercase tracking-wider mb-3">Categoría</label>
                 <div class="relative">
-                    <select id="category-select" onchange="toggleCustomInput()" class="w-full bg-gray-900 text-white border-2 border-gray-700 rounded-xl p-3 focus:border-blue-500 focus:outline-none text-lg appearance-none relative z-10 bg-transparent">
+                    <select id="category-select" onchange="toggleCustomInput()"
+                        class="w-full bg-gray-900 text-white border-2 border-gray-700 rounded-xl p-3 focus:border-blue-500 focus:outline-none text-lg appearance-none relative z-10 bg-transparent">
                         <option value="seleccion">⚽ Selección Argentina</option>
                         <option value="comidas">🥟 Comidas Típicas</option>
                         <option value="lugares">📍 Lugares de Argentina</option>
@@ -112,57 +131,63 @@
                         <option value="marcas">🏷️ Marcas Argentinas</option>
                         <option value="famosos">📺 Famosos Argentinos</option>
                         <option value="custom">✍️ Personalizado (Escribir)</option>
-                        <option value="ai_prompt">🧠 IA: Tema Abierto</option> <!-- Nueva Opción con IA -->
+                        <option value="ai_prompt">🧠 IA: Tema Abierto</option>
                     </select>
                     <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-0">▼</div>
                 </div>
 
-                <!-- Input para palabra personalizada / IA Prompt -->
                 <div id="custom-word-container" class="hidden mt-3">
-                    <input type="text" id="custom-word-input" placeholder="Ej: Anécdota del viaje 2019" class="w-full bg-gray-700 text-white border border-gray-600 rounded-xl p-3 focus:border-blue-500 focus:outline-none">
+                    <input type="text" id="custom-word-input" placeholder="Ej: Anécdota del viaje 2019"
+                        class="w-full bg-gray-700 text-white border border-gray-600 rounded-xl p-3 focus:border-blue-500 focus:outline-none">
                 </div>
-                
-                <!-- AI Instruction for Prompt -->
-                <p id="ai-instruction" class="hidden text-sm text-gray-400 mt-2 p-2 bg-gray-700/50 rounded-lg border border-gray-600">
-                    Escribe un tema o una restricción (Ej: "Paises que empiecen con A", "Nombres de perros", "Frutas rojas"). La IA elegirá una palabra aleatoria.
+
+                <p id="ai-instruction"
+                    class="hidden text-sm text-gray-400 mt-2 p-2 bg-gray-700/50 rounded-lg border border-gray-600">
+                    Escribe un tema o una restricción (Ej: "Paises que empiecen con A", "Nombres de perros", "Frutas
+                    rojas"). La IA elegirá una palabra aleatoria.
                 </p>
             </div>
 
-            <!-- Configuración de Jugadores -->
             <div class="bg-gray-800 p-5 rounded-2xl border border-gray-700 shadow-lg">
                 <div class="flex justify-between items-center mb-4">
                     <label class="text-gray-400 text-xs font-bold uppercase tracking-wider">Jugadores</label>
-                    <span id="player-count-badge" class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full font-bold">3</span>
+                    <span id="player-count-badge"
+                        class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full font-bold">3</span>
                 </div>
-                
-                <!-- Lista de Nombres -->
+
                 <div id="players-container" class="space-y-3 mb-4">
-                    <!-- Los inputs se generan aquí -->
                     <div class="flex gap-2">
                         <span class="flex items-center justify-center w-8 text-gray-500 font-bold">1</span>
-                        <input type="text" placeholder="Nombre" class="player-name-input flex-1 bg-gray-900 border border-gray-700 rounded-lg p-3 text-base focus:border-blue-500 outline-none" value="Jugador 1">
+                        <input type="text" placeholder="Nombre"
+                            class="player-name-input flex-1 bg-gray-900 border border-gray-700 rounded-lg p-3 text-base focus:border-blue-500 outline-none"
+                            value="Jugador 1">
                     </div>
                     <div class="flex gap-2">
-                         <span class="flex items-center justify-center w-8 text-gray-500 font-bold">2</span>
-                        <input type="text" placeholder="Nombre" class="player-name-input flex-1 bg-gray-900 border border-gray-700 rounded-lg p-3 text-base focus:border-blue-500 outline-none" value="Jugador 2">
+                        <span class="flex items-center justify-center w-8 text-gray-500 font-bold">2</span>
+                        <input type="text" placeholder="Nombre"
+                            class="player-name-input flex-1 bg-gray-900 border border-gray-700 rounded-lg p-3 text-base focus:border-blue-500 outline-none"
+                            value="Jugador 2">
                     </div>
                     <div class="flex gap-2">
-                         <span class="flex items-center justify-center w-8 text-gray-500 font-bold">3</span>
-                        <input type="text" placeholder="Nombre" class="player-name-input flex-1 bg-gray-900 border border-gray-700 rounded-lg p-3 text-base focus:border-blue-500 outline-none" value="Jugador 3">
+                        <span class="flex items-center justify-center w-8 text-gray-500 font-bold">3</span>
+                        <input type="text" placeholder="Nombre"
+                            class="player-name-input flex-1 bg-gray-900 border border-gray-700 rounded-lg p-3 text-base focus:border-blue-500 outline-none"
+                            value="Jugador 3">
                     </div>
                 </div>
 
                 <div class="flex gap-2">
-                    <button onclick="addPlayerInput()" class="flex-1 py-3 bg-gray-700 hover:bg-gray-600 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2 active:bg-gray-500">
+                    <button onclick="addPlayerInput()"
+                        class="flex-1 py-3 bg-gray-700 hover:bg-gray-600 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2 active:bg-gray-500">
                         <span>➕</span> Agregar
                     </button>
-                    <button onclick="removePlayerInput()" class="px-5 py-3 bg-gray-700 hover:bg-gray-600 rounded-xl text-sm font-bold transition text-red-400 active:bg-gray-500">
+                    <button onclick="removePlayerInput()"
+                        class="px-5 py-3 bg-gray-700 hover:bg-gray-600 rounded-xl text-sm font-bold transition text-red-400 active:bg-gray-500">
                         <span>➖</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Configuración de Impostores -->
             <div class="bg-gray-800 p-5 rounded-2xl border border-gray-700 shadow-lg">
                 <div class="flex justify-between items-center mb-4">
                     <label class="text-gray-400 text-xs font-bold uppercase tracking-wider">Impostores</label>
@@ -171,92 +196,100 @@
                         <span id="imposter-count-display" class="font-display text-xl text-red-500">1</span>
                     </div>
                 </div>
-                <input type="range" id="imposter-slider" min="1" max="3" value="1" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-red-500">
+                <input type="range" id="imposter-slider" min="1" max="3" value="1"
+                    class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-red-500">
             </div>
 
-            <!-- Botón Iniciar Flotante (Sticky bottom) -->
-            <div class="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-gray-900 via-gray-900 to-transparent pb-safe z-40">
-                 <button id="start-game-button" onclick="startGame()" class="w-full max-w-md mx-auto py-4 bg-gradient-to-r from-blue-600 to-indigo-600 active:from-blue-700 active:to-indigo-700 rounded-2xl text-white font-bold text-xl shadow-xl transform active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-blue-400/20">
+            <div
+                class="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-gray-900 via-gray-900 to-transparent pb-safe z-40">
+                <button id="start-game-button" onclick="startGame()"
+                    class="w-full max-w-md mx-auto py-4 bg-gradient-to-r from-blue-600 to-indigo-600 active:from-blue-700 active:to-indigo-700 rounded-2xl text-white font-bold text-xl shadow-xl transform active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-blue-400/20">
                     COMENZAR 🚀
                 </button>
             </div>
         </div>
 
-        <!-- PANTALLA 2: PASE DE DISPOSITIVO -->
-        <div id="screen-pass" class="hidden flex flex-col justify-center items-center text-center space-y-8 card-enter min-h-[70vh]">
+        <div id="screen-pass"
+            class="hidden flex flex-col justify-center items-center text-center space-y-8 card-enter min-h-[70vh]">
             <div class="relative">
                 <div class="absolute inset-0 bg-blue-500 blur-2xl opacity-20 animate-pulse rounded-full"></div>
-                <div class="bg-gray-800 p-8 rounded-3xl shadow-2xl border-4 border-gray-700 w-48 h-48 flex items-center justify-center relative z-10">
+                <div
+                    class="bg-gray-800 p-8 rounded-3xl shadow-2xl border-4 border-gray-700 w-48 h-48 flex items-center justify-center relative z-10">
                     <span class="text-7xl">📱</span>
                 </div>
             </div>
-            
+
             <div class="space-y-2 px-4">
                 <p class="text-gray-400 text-sm uppercase tracking-widest">Dale el celular a</p>
                 <h2 id="pass-player-name" class="font-display text-5xl text-white break-words leading-tight">NOMBRE</h2>
             </div>
 
-            <button onclick="showSecret()" class="w-full max-w-xs py-5 bg-green-600 active:bg-green-700 rounded-2xl text-white font-bold text-xl shadow-lg mt-8 mx-4 transform active:scale-[0.98] transition-all">
+            <button onclick="showSecret()"
+                class="w-full max-w-xs py-5 bg-green-600 active:bg-green-700 rounded-2xl text-white font-bold text-xl shadow-lg mt-8 mx-4 transform active:scale-[0.98] transition-all">
                 SOY YO 👆
             </button>
         </div>
 
-        <!-- PANTALLA 3: REVELACIÓN DE ROL -->
-        <div id="screen-reveal" class="hidden flex flex-col justify-center items-center text-center relative card-enter secret-reveal p-4 min-h-[80vh]">
-            
-            <!-- Tarjeta de Identidad -->
-            <div id="role-card" class="bg-gray-800 border-2 border-gray-600 p-8 rounded-[2rem] shadow-2xl w-full max-w-sm transform transition-all duration-300">
+        <div id="screen-reveal"
+            class="hidden flex flex-col justify-center items-center text-center relative card-enter secret-reveal p-4 min-h-[80vh]">
+
+            <div id="role-card"
+                class="bg-gray-800 border-2 border-gray-600 p-8 rounded-[2rem] shadow-2xl w-full max-w-sm transform transition-all duration-300">
                 <div class="mb-8">
                     <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Tu misión es</p>
                     <h2 id="role-title" class="font-display text-5xl mb-4">CIUDADANO</h2>
                     <div id="role-icon" class="text-7xl drop-shadow-lg">😇</div>
                 </div>
 
-                <div id="secret-word-display" class="bg-gray-900/80 rounded-2xl p-6 border border-gray-700 backdrop-blur-sm">
+                <div id="secret-word-display"
+                    class="bg-gray-900/80 rounded-2xl p-6 border border-gray-700 backdrop-blur-sm">
                     <p class="text-gray-500 text-xs uppercase mb-2 tracking-widest">Palabra Secreta</p>
                     <p id="the-secret-word" class="text-3xl font-black text-blue-400 break-words leading-tight">---</p>
                 </div>
-                
-                <div id="imposter-msg" class="hidden bg-gradient-to-br from-red-900/40 to-red-900/10 rounded-2xl p-6 border border-red-500/30">
+
+                <div id="imposter-msg"
+                    class="hidden bg-gradient-to-br from-red-900/40 to-red-900/10 rounded-2xl p-6 border border-red-500/30">
                     <p class="text-red-400 font-bold text-xl mb-2">¡NO SABES NADA!</p>
                     <p class="text-red-200 text-sm">Escucha, miente y trata de adivinar la palabra secreta.</p>
                 </div>
             </div>
 
-            <button onclick="hideSecret()" class="mt-10 w-full max-w-xs py-4 bg-gray-700 active:bg-gray-600 text-white rounded-full font-bold border border-gray-500 text-lg shadow-lg mb-8">
+            <button onclick="hideSecret()"
+                class="mt-10 w-full max-w-xs py-4 bg-gray-700 active:bg-gray-600 text-white rounded-full font-bold border border-gray-500 text-lg shadow-lg mb-8">
                 ENTENDIDO, PASAR 🙈
             </button>
         </div>
 
-        <!-- PANTALLA 4: JUEGO EN CURSO -->
         <div id="screen-game" class="hidden flex flex-col text-center card-enter min-h-[80vh]">
-            
+
             <div class="flex-1 flex flex-col justify-center items-center space-y-8 px-4 mt-8">
                 <div class="relative">
                     <div class="text-9xl relative z-10">🗣️</div>
-                     <div class="absolute inset-0 bg-yellow-500 blur-3xl opacity-10 rounded-full"></div>
+                    <div class="absolute inset-0 bg-yellow-500 blur-3xl opacity-10 rounded-full"></div>
                 </div>
 
                 <div>
                     <h2 class="font-display text-5xl text-white mb-2">¡A DEBATIR!</h2>
-                    <p class="text-gray-400 text-lg leading-relaxed">El impostor está entre nosotros.<br>Hagan preguntas sutiles.</p>
+                    <p class="text-gray-400 text-lg leading-relaxed">El impostor está entre nosotros.<br>Hagan preguntas
+                        sutiles.</p>
                 </div>
-                
-                <!-- Info de Categoría -->
+
                 <div class="inline-flex items-center gap-2 bg-gray-800 px-5 py-2 rounded-full border border-gray-700">
                     <span class="text-gray-500 text-xs uppercase font-bold">Tema:</span>
                     <span id="game-category-display" class="text-blue-300 font-bold text-lg">Fútbol</span>
                 </div>
             </div>
 
-            <!-- Timer Grande -->
             <div class="mb-10 mt-8" onclick="toggleTimer()">
-                <div id="timer" class="font-mono text-6xl font-bold text-gray-200 tracking-tighter tabular-nums">00:00</div>
-                <p id="timer-status" class="text-xs text-blue-400 uppercase tracking-widest mt-2 animate-pulse">Tocar para iniciar</p>
+                <div id="timer" class="font-mono text-6xl font-bold text-gray-200 tracking-tighter tabular-nums">00:00
+                </div>
+                <p id="timer-status" class="text-xs text-blue-400 uppercase tracking-widest mt-2 animate-pulse">Tocar
+                    para iniciar</p>
             </div>
 
             <div class="p-4 pb-20">
-                <button onclick="resetGame()" class="w-full py-4 bg-red-600/20 hover:bg-red-600/30 border border-red-600/50 rounded-2xl text-red-400 font-bold uppercase tracking-wider transition-all">
+                <button onclick="resetGame()"
+                    class="w-full py-4 bg-red-600/20 hover:bg-red-600/30 border border-red-600/50 rounded-2xl text-red-400 font-bold uppercase tracking-wider transition-all">
                     Terminar Partida
                 </button>
             </div>
@@ -264,7 +297,6 @@
 
     </main>
 
-    <!-- LOGIC -->
     <script>
         // --- DATOS ---
         const DATABASE = {
@@ -277,15 +309,14 @@
             famosos: ["Ricardo Darín", "Susana Giménez", "Mirtha Legrand", "Francella", "Bizarrap", "Lali Espósito", "Fito Páez", "Charly García", "Tinelli", "Moria Casán", "Sandro", "Cerati"]
         };
 
-        // --- CONSTANTES API ---
-        const API_MODEL = "gemini-2.5-flash-preview-09-2025";
-        const API_KEY = "AIzaSyDfjJq93o4cVG2IOKz_H_sGNUg85nIy5f0"; 
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${API_KEY}`;
+        // --- CONSTANTES API (MODIFICADO) ---
+        // 🛑 Eliminamos la clave API y la URL de Google para mayor seguridad.
+        const NETLIFY_FUNCTION_URL = '/.netlify/functions/generate';
 
 
         // --- ESTADO DEL JUEGO ---
         let gameState = {
-            players: [], 
+            players: [],
             secretWord: "",
             category: "",
             currentPlayerIndex: 0,
@@ -310,7 +341,7 @@
 
 
         // --- UTILITIES ---
-        
+
         function showAlert(message, isError = true) {
             alertMessage.innerText = message;
             alertMessage.classList.toggle('bg-red-600', isError);
@@ -335,9 +366,9 @@
                 startGameButton.classList.add('active:scale-[0.98]');
             }
         }
-        
+
         // --- FUNCIONES SETUP & PWA ---
-        
+
         // Verificar si se puede compartir
         if (navigator.share) {
             document.getElementById('share-btn').classList.remove('hidden');
@@ -358,7 +389,7 @@
         function addPlayerInput() {
             const container = document.getElementById('players-container');
             const count = container.children.length + 1;
-            
+
             const div = document.createElement('div');
             div.className = 'flex gap-2 card-enter';
             div.innerHTML = `
@@ -367,7 +398,7 @@
             `;
             container.appendChild(div);
             updateBadges();
-            
+
             // Scroll suave hacia abajo para ver el nuevo input
             setTimeout(() => {
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
@@ -385,12 +416,12 @@
         function updateBadges() {
             const count = document.getElementsByClassName('player-name-input').length;
             document.getElementById('player-count-badge').innerText = count;
-            
+
             const slider = document.getElementById('imposter-slider');
             // Máximo impostores es (jugadores / 2) - 1, mínimo 1
             const maxImposters = Math.max(1, Math.floor((count - 1) / 2));
             slider.max = maxImposters;
-            
+
             if (parseInt(slider.value) > maxImposters) slider.value = maxImposters;
             document.getElementById('imposter-count-display').innerText = slider.value;
         }
@@ -416,35 +447,29 @@
             }
         }
 
-        // --- LÓGICA DE IA ---
+        // --- LÓGICA DE IA (MODIFICADA PARA USAR NETLIFY FUNCTION) ---
 
         async function fetchSecretWordFromAI(prompt) {
-            // Verificar si la clave de API está configurada
-            if (API_KEY === "TU_CLAVE_API_DE_GEMINI_AQUI" || !API_KEY) {
-                showAlert("Error: La clave de API de Gemini no está configurada. Abre el código y reemplaza 'TU_CLAVE_API_DE_GEMINI_AQUI' con tu clave real.", true);
-                return null;
-            }
-            
-            const systemPrompt = `Eres un experto generador de palabras secretas para juegos. Tu tarea es generar UNA ÚNICA palabra o frase corta (máximo 4 palabras), aleatoria, que cumpla estrictamente con la restricción dada por el usuario. La respuesta debe ser solo la palabra o frase, sin explicaciones, comillas, ni texto adicional.`;
-            
-            const userQuery = `Dada la siguiente restricción: "${prompt}". Genera UN solo término aleatorio que encaje.`;
+
+            // Enviamos el prompt al backend seguro
+            const userQuery = `Dada la siguiente restricción: "${prompt}". Genera UN solo término aleatorio que encaje.
+                La respuesta debe ser solo la palabra o frase, sin explicaciones, comillas, ni texto adicional.`;
 
             const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                tools: [{ "google_search": {} }],
-                systemInstruction: { parts: [{ text: systemPrompt }] },
+                prompt: userQuery, // Enviamos el prompt al backend
             };
 
             let attempts = 0;
             const maxAttempts = 3;
-            const initialDelay = 1000; // 1 second
+            const initialDelay = 1000;
 
             while (attempts < maxAttempts) {
                 try {
                     const delay = initialDelay * Math.pow(2, attempts);
                     if (attempts > 0) await new Promise(resolve => setTimeout(resolve, delay));
 
-                    const response = await fetch(API_URL, {
+                    // 1. LLAMADA AL ENDPOINT SEGURO DE NETLIFY
+                    const response = await fetch(NETLIFY_FUNCTION_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
@@ -452,23 +477,28 @@
 
                     if (!response.ok) {
                         const errorData = await response.json();
-                        throw new Error(errorData.error ? errorData.error.message : response.statusText);
+                        // El backend debe devolver el mensaje de error de la API si falla
+                        throw new Error(errorData.error || response.statusText);
                     }
 
                     const result = await response.json();
-                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    const text = result.generatedText; // <-- El backend devuelve 'generatedText'
 
                     if (text) {
                         // Limpiar el texto: remover comillas, puntos finales, y espacios extra.
+                        setLoading(false);
                         return text.replace(/["'.\s]*$/g, '').trim();
                     } else {
-                        throw new Error("Respuesta de la IA vacía.");
+                        throw new Error("Respuesta de la IA vacía o formato incorrecto.");
                     }
 
                 } catch (error) {
                     console.error(`Error en el intento ${attempts + 1}:`, error.message);
                     attempts++;
                     if (attempts === maxAttempts) {
+                        setLoading(false);
+                        // Mostrar el error real de la API o del servidor
+                        showAlert(`No se pudo conectar con la IA. Error: ${error.message}`, true);
                         return null; // Fallo total
                     }
                 }
@@ -481,10 +511,10 @@
         async function startGame() {
             // Si ya está cargando, salir
             if (startGameButton.disabled) return;
-            
+
             const inputs = document.getElementsByClassName('player-name-input');
             const names = Array.from(inputs).map(i => i.value.trim()).filter(n => n !== "");
-            
+
             if (names.length < 3) return showAlert("¡Necesitas al menos 3 jugadores!");
 
             const catSelect = categorySelect.value;
@@ -498,35 +528,32 @@
             } else if (catSelect === 'ai_prompt') {
                 const prompt = customWordInput.value.trim();
                 if (!prompt) return showAlert("Escribe un prompt para que la IA genere la palabra.");
-                
-                // Agregamos una verificación de API KEY aquí también
-                if (API_KEY === "TU_CLAVE_API_DE_GEMINI_AQUI" || !API_KEY) {
-                    return showAlert("Error: La clave de API de Gemini no está configurada.", true);
-                }
-                
+
+                // Ya no verificamos la API Key aquí, la seguridad se mueve al backend
+
                 setLoading(true);
                 word = await fetchSecretWordFromAI(prompt);
-                setLoading(false);
-                
+
                 if (!word) {
-                    return showAlert("No pude generar una palabra con ese prompt. Intenta con una restricción diferente o usa una categoría manual.", true);
+                    // Si word es null, fetchSecretWordFromAI ya habrá mostrado un error
+                    return;
                 }
                 catName = `IA: ${prompt.substring(0, 30)}${prompt.length > 30 ? '...' : ''}`;
-            } 
+            }
             else {
                 const list = DATABASE[catSelect];
                 word = list[Math.floor(Math.random() * list.length)];
                 const optionText = document.querySelector(`#category-select option[value="${catSelect}"]`).text;
                 // Eliminar emoji del texto para guardar solo nombre
-                catName = optionText.replace(/^.\s/, ''); 
+                catName = optionText.replace(/^.\s/, '');
             }
 
             const imposterCount = parseInt(document.getElementById('imposter-slider').value);
             let roles = Array(names.length).fill('citizen');
-            
-            let indices = Array.from({length: names.length}, (_, i) => i);
-            indices.sort(() => Math.random() - 0.5); 
-            
+
+            let indices = Array.from({ length: names.length }, (_, i) => i);
+            indices.sort(() => Math.random() - 0.5);
+
             for (let i = 0; i < imposterCount; i++) {
                 roles[indices[i]] = 'imposter';
             }
@@ -568,7 +595,7 @@
                 roleTitle.className = "font-display text-5xl mb-4 text-red-500 animate-pulse";
                 roleIcon.innerText = "👺";
                 roleCard.classList.add('border-red-500', 'bg-gray-900');
-                
+
                 secretDisplay.classList.add('hidden');
                 imposterMsg.classList.remove('hidden');
             } else {
@@ -576,7 +603,7 @@
                 roleTitle.className = "font-display text-5xl mb-4 text-blue-400";
                 roleIcon.innerText = "🕵️";
                 roleCard.classList.add('border-blue-500', 'bg-gray-800');
-                
+
                 secretWord.innerText = gameState.secretWord;
             }
 
@@ -585,7 +612,7 @@
 
         function hideSecret() {
             gameState.currentPlayerIndex++;
-            
+
             if (gameState.currentPlayerIndex < gameState.players.length) {
                 updatePassScreen();
                 showScreen('pass');
@@ -605,7 +632,7 @@
             Object.values(screens).forEach(s => s.classList.add('hidden'));
             screens[screenName].classList.remove('hidden');
             // Forzar scroll al inicio
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
         }
 
         function resetGame() {
@@ -616,21 +643,23 @@
         // --- TIMER ---
         let isTimerRunning = false;
 
-        function resetTimerUI() {
-            stopTimer();
-            gameState.seconds = 0;
-            updateTimerDisplay();
-            document.getElementById('timer-status').innerText = "TOCAR PARA INICIAR";
-            document.getElementById('timer-status').classList.add('animate-pulse');
+        function formatTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = seconds % 60;
+            return `${min < 10 ? '0' : ''}${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timer').innerText = formatTime(gameState.seconds);
         }
 
         function startTimer() {
+            if (gameState.timerInterval) return;
             isTimerRunning = true;
-            document.getElementById('timer-status').innerText = "TIEMPO CORRIENDO...";
-            document.getElementById('timer-status').classList.remove('animate-pulse');
-            document.getElementById('timer').classList.add('text-white');
-            document.getElementById('timer').classList.remove('text-gray-200');
-            
+            document.getElementById('timer-status').innerText = 'EN CURSO';
+            document.getElementById('timer-status').classList.remove('animate-pulse', 'text-blue-400');
+            document.getElementById('timer-status').classList.add('text-green-400');
+
             gameState.timerInterval = setInterval(() => {
                 gameState.seconds++;
                 updateTimerDisplay();
@@ -638,32 +667,38 @@
         }
 
         function stopTimer() {
-            isTimerRunning = false;
             clearInterval(gameState.timerInterval);
-            document.getElementById('timer-status').innerText = "PAUSADO - TOCAR PARA SEGUIR";
-            document.getElementById('timer-status').classList.add('animate-pulse');
-            document.getElementById('timer').classList.remove('text-white');
-            document.getElementById('timer').classList.add('text-gray-200');
-        }
-
-        function updateTimerDisplay() {
-            const mins = Math.floor(gameState.seconds / 60).toString().padStart(2, '0');
-            const secs = (gameState.seconds % 60).toString().padStart(2, '0');
-            document.getElementById('timer').innerText = `${mins}:${secs}`;
+            gameState.timerInterval = null;
+            isTimerRunning = false;
         }
 
         function toggleTimer() {
             if (isTimerRunning) {
                 stopTimer();
+                document.getElementById('timer-status').innerText = 'PAUSADO';
+                document.getElementById('timer-status').classList.add('animate-pulse', 'text-yellow-400');
+                document.getElementById('timer-status').classList.remove('text-green-400', 'text-blue-400');
             } else {
                 startTimer();
             }
         }
 
-        // Init
-        updateBadges();
-        // Asegurar que el input personalizado/AI esté oculto al inicio
-        customWordContainer.classList.add('hidden');
+        function resetTimerUI() {
+            stopTimer();
+            gameState.seconds = 0;
+            updateTimerDisplay();
+            document.getElementById('timer-status').innerText = 'TOCAR PARA INICIAR';
+            document.getElementById('timer-status').classList.add('animate-pulse', 'text-blue-400');
+            document.getElementById('timer-status').classList.remove('text-green-400', 'text-yellow-400');
+        }
+
+
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            updateBadges();
+            resetTimerUI();
+        });
     </script>
 </body>
+
 </html>

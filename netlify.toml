@@ -1,0 +1,3 @@
+[build]
+  # Indica a Netlify que busque las funciones sin servidor en esta carpeta
+  functions = "netlify/functions"
